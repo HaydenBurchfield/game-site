@@ -1,0 +1,199 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: linear-gradient(to bottom, #c8b8db 0%, #b8a8d4 20%, #8b7ab8 40%, #5d4e8f 60%, #3d2f6f 80%, #2a1f4f 100%);
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60%;
+    background: 
+        radial-gradient(ellipse at 20% 100%, #1a0f3a 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 100%, #2a1845 0%, transparent 50%);
+    z-index: 1;
+}
+
+body::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    background: linear-gradient(to top, #0d0520 0%, transparent 100%);
+    z-index: 2;
+}
+
+.login-container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 40px 50px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    width: 400px;
+    z-index: 10;
+    position: relative;
+}
+
+.login-container h2 {
+    text-align: center;
+    color: white;
+    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.login-container h2:first-child {
+    margin-bottom: 10px;
+}
+
+.login-container h2[style*="color:red"] {
+    font-size: 14px;
+    margin-bottom: 20px;
+    color: #ff6b6b !important;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 14px 45px 14px 20px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 25px;
+    color: white;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.form-group input:focus {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.form-group::after {
+    content: '';
+    position: absolute;
+    right: 18px;
+    top: 38px;
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    opacity: 0.6;
+}
+
+.form-group:has(input[type="text"])::after {
+    content: '📧';
+    font-size: 18px;
+}
+
+.form-group:has(input[type="password"])::after {
+    content: '🔒';
+    font-size: 16px;
+}
+
+.btn {
+    background: rgba(255, 255, 255, 0.9);
+    color: #5d4e8f;
+    padding: 14px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    text-transform: capitalize;
+}
+
+.btn:hover {
+    background: white;
+    box-shadow: 0 5px 20px rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.extra-options {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.extra-options p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+}
+
+.extra-options a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.extra-options a:hover {
+    text-decoration: underline;
+    color: #ffffff;
+}
+
+/* Mountain silhouettes 
+.login-container::before {
+    content: '';
+    position: fixed;
+    bottom: -10%;
+    left: -5%;
+    width: 50%;
+    height: 60%;
+    background: linear-gradient(to top, #0d0520 20%, transparent 100%);
+    clip-path: polygon(0 100%, 0 60%, 15% 45%, 25% 50%, 40% 35%, 55% 40%, 70% 25%, 85% 30%, 100% 20%, 100% 100%);
+    z-index: -1;
+    opacity: 0.8;
+}*/
+
+@media (max-width: 480px) {
+    .login-container {
+        width: 90%;
+        padding: 30px 25px;
+    }
+}

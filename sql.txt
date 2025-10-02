@@ -1,0 +1,10 @@
+CREATE TABLE `game-site`.`user` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `email` VARCHAR(100) NULL,
+  `password` VARCHAR(200) NULL,
+  `username` VARCHAR(20) NULL,
+  `create_date` DATETIME NULL,
+  PRIMARY KEY (`id`));
+
+
+
