@@ -1,39 +1,26 @@
-
 <?php
-    require_once 'User.php'; 
+require_once 'User.php';
+session_start();
 
-    session_start();
+$username = "";
+$password = "";
+$uerror = false;
+$perror = false;
+$invalid_login = false;
 
+function sanitizeInput($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+}
 
-
-    $username = ""; 
-    $password = ""; 
-    
-    $uerror = false;
-    $perror = false; 
-    $invalid_login = false;
-
-    function sanitizeInput($data) {
-        $data = trim($data);
-        $data = stripslashes($data);
-        $data = htmlspecialchars($data);
-
-        return $data;
-
-    }
-
-
-
-    if ($_SERVER['REQUEST_METHOD'] == "POST") {
+if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $email = !empty($_POST['email']) ? sanitizeInput($_POST['email']) : "";
     $password = !empty($_POST['password']) ? sanitizeInput($_POST['password']) : "";
 
-    if (empty($email)) {
-        $uerror = true;
-    }
-    if (empty($password)) {
-        $perror = true;
-    }
+    if (empty($email)) $uerror = true;
+    if (empty($password)) $perror = true;
 
     if (!$uerror && !$perror) {
         $userid = User::validateUser($email, $password);
@@ -55,16 +42,7 @@
         $message = "Please enter both email and password.";
     }
 }
-
-
-
 ?>
-
-
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -99,6 +77,5 @@
             </div>
         </form>
     </div>
-    
 </body>
 </html>
