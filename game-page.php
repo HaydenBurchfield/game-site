@@ -20,6 +20,13 @@ $games = [
         'image' => '🏎️',
         'description' => 'Driving Game',
         'url' => 'games/traffic-jam-3d.php'
+    ],
+    [
+        'id' => 2,
+        'name' => 'Test Game',
+        'image' => '😁',
+        'description' => 'Test Game',
+        'url' => 'games/traffic-jam-3d.php'
     ]
 ];
 
