@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit;
+}
+
+$user = new User();
+$user->populate($_SESSION['user_id']);
+
+
 // Game information
 $game_title = "Traffic Jam 3D";
 $game_description = "Driving";
