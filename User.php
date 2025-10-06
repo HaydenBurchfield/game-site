@@ -2,12 +2,29 @@
 require_once 'DatabaseConnection.php'; 
 
 class User {
-    // Fields (match database columns)
     public $id = 0;
     public $username = "";
     public $password = "";
     public $email = "";
     public $create_date = "";
+
+    // 🔍 Check if email or username already exists
+    public static function exists($email, $username) {
+        $db = new DatabaseConnection();
+        $sql = "SELECT id FROM `user` WHERE email = ? OR username = ?";
+        $stmt = $db->connection->prepare($sql);
+        if (!$stmt) die("Error preparing exists check: " . $db->connection->error);
+
+        $stmt->bind_param("ss", $email, $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $exists = ($result->num_rows > 0);
+
+        $stmt->close();
+        $db->closeConnection();
+        return $exists;
+    }
 
     // Search users
     public static function searchUsers($searchTerm) {
@@ -74,12 +91,18 @@ class User {
         $db->closeConnection();
     }
 
-    // Insert new user
+    // 🧩 Insert new user (with duplicate prevention)
     public function insert() {
+        // Check for existing email or username
+        if (self::exists($this->email, $this->username)) {
+            // Duplicate found — stop creation
+            return false;
+        }
+
         $db = new DatabaseConnection();
         $sql = "INSERT INTO `user` (username, password, email, create_date) VALUES (?, ?, ?, NOW())";
         $stmt = $db->connection->prepare($sql);
-        if (!$stmt) die("Error preparing: " . $db->connection->error);
+        if (!$stmt) die("Error preparing insert: " . $db->connection->error);
 
         $hashedPassword = password_hash($this->password, PASSWORD_DEFAULT);
         $stmt->bind_param("sss", $this->username, $hashedPassword, $this->email);
@@ -93,33 +116,26 @@ class User {
     }
 
     public function update() {
-    $db = new DatabaseConnection();
+        $db = new DatabaseConnection();
 
-    if (!empty($this->password)) {
-        // Hash new password if updating
-        $hashedPassword = password_hash($this->password, PASSWORD_DEFAULT);
-        $sql = "UPDATE `user` SET username = ?, email = ?, password = ? WHERE id = ?";
-        $stmt = $db->connection->prepare($sql);
-        if (!$stmt) {
-            die("Error preparing update: " . $db->connection->error);
+        if (!empty($this->password)) {
+            $hashedPassword = password_hash($this->password, PASSWORD_DEFAULT);
+            $sql = "UPDATE `user` SET username = ?, email = ?, password = ? WHERE id = ?";
+            $stmt = $db->connection->prepare($sql);
+            if (!$stmt) die("Error preparing update: " . $db->connection->error);
+            $stmt->bind_param("sssi", $this->username, $this->email, $hashedPassword, $this->id);
+        } else {
+            $sql = "UPDATE `user` SET username = ?, email = ? WHERE id = ?";
+            $stmt = $db->connection->prepare($sql);
+            if (!$stmt) die("Error preparing update: " . $db->connection->error);
+            $stmt->bind_param("ssi", $this->username, $this->email, $this->id);
         }
-        $stmt->bind_param("sssi", $this->username, $this->email, $hashedPassword, $this->id);
-    } else {
-        // Update without password
-        $sql = "UPDATE `user` SET username = ?, email = ? WHERE id = ?";
-        $stmt = $db->connection->prepare($sql);
-        if (!$stmt) {
-            die("Error preparing update: " . $db->connection->error);
-        }
-        $stmt->bind_param("ssi", $this->username, $this->email, $this->id);
-    }
 
-    $success = $stmt->execute();
-    $stmt->close();
-    $db->closeConnection();
-    return $success;
+        $success = $stmt->execute();
+        $stmt->close();
+        $db->closeConnection();
+        return $success;
     }
-
 
     // Delete user
     public static function deleteUser($id) {

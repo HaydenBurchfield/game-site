@@ -67,8 +67,8 @@
             $new_user->username = $username;
             $new_user->email = $email;
             $new_user->password = $password;
-            $new_user->insert();
-            $created = $new_user;
+            
+            $created = $new_user->insert();
             
             if ($created) {
                 $_SESSION['user_id'] = $new_user->id;
@@ -79,7 +79,7 @@
                 exit;
             } else {
                 $registration_error = true;
-                $message = "Email already exists or registration failed!";
+                $message = "Email/Username already exists or registration failed!";
             }
         }
     }
